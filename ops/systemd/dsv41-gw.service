@@ -1,0 +1,13 @@
+# API 网关：鉴权 + 统计 + SSE 流式透传（v2.3）
+[Unit]
+Description=dsv41 API gateway (auth+stats+streaming) on 8012
+After=dsv41-r1.service
+[Service]
+Type=simple
+Environment=DSV41_GW_KEY=changeme        # 改成你的 key
+Environment=DSV41_GW_BACKENDS=127.0.0.1:8011
+ExecStart=%h/miniconda3/envs/dsv41/bin/python %h/dsv41_deploy/gateway.py
+Restart=on-failure
+RestartSec=10
+[Install]
+WantedBy=default.target

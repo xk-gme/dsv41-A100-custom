@@ -1,0 +1,16 @@
+# 第二副本（保留勿启用！）：实测该运行时的放置器在卡空闲时不遵守 --devices 限制，
+# 会把权重摊满全部 8 卡，两实例必然互相挤爆（2026-10-26 实测崩溃循环）。仅存档。
+[Unit]
+Description=dsv41 replica2 (DO NOT ENABLE - placer not multi-instance safe)
+[Service]
+Type=simple
+WorkingDirectory=%h/dsv41_deploy/dsv41_runtime
+Environment=DSV41_NVCC=/usr/local/cuda-12.8/bin/nvcc
+Environment=LANG=C.UTF-8
+Environment=LC_ALL=C.UTF-8
+Environment=PYTHONUTF8=1
+ExecStart=%h/miniconda3/envs/dsv41/bin/python -m dsv41.serve --ckpt /data/models/DeepSeek-V4.1-Flash --devices 4,5,6,7 --host 127.0.0.1 --port 8013 --max-seq-len 65536
+Restart=on-failure
+RestartSec=30
+[Install]
+WantedBy=default.target
